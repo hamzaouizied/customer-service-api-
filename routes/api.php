@@ -15,9 +15,6 @@ Route::middleware('auth:customer-api')->group(function () {
         Route::get('all', [CustomerController::class, 'getAll']);//View all customers
         Route::patch('update/{customer}', [CustomerController::class, 'update']);//Update customer
         Route::delete('delete/{customer}', [CustomerController::class, 'delete']);//Delete customer
-        //Auth jwt with Customer model
-        Route::post('logout', [CustomerAuthController::class, 'logout']);
-        Route::post('refresh', [CustomerAuthController::class, 'refresh']);
     });
     Route::prefix('service')->group(function () {
         //Service Api
