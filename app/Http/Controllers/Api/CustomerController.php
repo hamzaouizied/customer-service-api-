@@ -3,47 +3,43 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Customer;
+use App\Http\Resources\CustomerResource;
+use App\Http\Resources\AllCustomersResource;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\UpdateCustomerRequest;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function show(Customer $customer): CustomerResource
     {
-        //
+        return new CustomerResource($customer);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function getAll(): AnonymousResourceCollection
     {
-        //
+        $customers = Customer::with('services')->paginate(perPage: 1);
+
+        return AllCustomersResource::collection($customers);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Customer $customer, UpdateCustomerRequest $request): CustomerResource
     {
-        //
+        $customer->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+
+        return new CustomerResource($customer);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function delete(Customer $customer): JsonResponse
     {
-        //
+        $customer->delete();
+        return response()->json(['message' => 'Customer successfully deleted'], 201);
     }
 }
