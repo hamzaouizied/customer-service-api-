@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomerRequest;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\Customer;
 use App\Http\Resources\CustomerResource;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\CustomerLoginRequest;
+use App\Http\Requests\Customer\CustomerLoginRequest;
+use App\Http\Requests\Customer\CreateCustomerRequest;
 use Illuminate\Http\JsonResponse;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CustomerAuthController extends Controller
 {
-    public function register(CustomerRequest $request): CustomerResource
+    public function register(CreateCustomerRequest $request): CustomerResource
     {
         $customer = new Customer();
         $customer->name = $request->name;

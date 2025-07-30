@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\AllCustomersResource;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\JsonResponse;
-use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CustomerController extends Controller
 {
