@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
-use App\Http\Resources\CustomerResource;
+use App\Http\Resources\Customer\CustomerResource;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Customer\CustomerLoginRequest;
 use App\Http\Requests\Customer\CreateCustomerRequest;

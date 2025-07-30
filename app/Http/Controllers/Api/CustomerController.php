@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
-use App\Http\Resources\CustomerResource;
-use App\Http\Resources\AllCustomersResource;
+use App\Http\Resources\Customer\CustomerResource;
+use App\Http\Resources\Customer\AllCustomersResource;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +20,7 @@ class CustomerController extends Controller
 
     public function getAll(): AnonymousResourceCollection
     {
-        $customers = Customer::with('services')->paginate(perPage: 1);
+        $customers = Customer::with('services')->paginate(perPage: 10);
 
         return AllCustomersResource::collection($customers);
     }
