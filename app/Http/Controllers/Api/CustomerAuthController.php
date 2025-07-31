@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Customer\CustomerLoginRequest;
 use App\Http\Requests\Customer\CreateCustomerRequest;
 use Illuminate\Http\JsonResponse;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * @OA\Info(

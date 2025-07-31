@@ -105,7 +105,7 @@ class ServiceController extends Controller
      */
     public function getAll(): AnonymousResourceCollection
     {
-        $customers = Service::with('customers')->paginate(perPage: 10);
+        $customers = Service::with('customer')->paginate(perPage: 10);
 
         return AllServicesResource::collection($customers);
     }

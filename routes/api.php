@@ -19,7 +19,7 @@ Route::middleware('auth:customer-api')->group(function () {
     Route::prefix('service')->group(function () {
         //Service Api
         Route::post('store', [ServiceController::class, 'store']); //create a service for customer
-        Route::get('show/{service}', [ServiceController::class, 'show']); //View Service
+        Route::get('all', [ServiceController::class, 'getall']); //View all Services
         Route::get('customer/{customer}', [ServiceController::class, 'customerServices']);// view service of a customer
         Route::patch('update/{service}', [ServiceController::class, 'update']);//Update service
         Route::delete('delete/{service}', [ServiceController::class, 'delete']);//Delete service
