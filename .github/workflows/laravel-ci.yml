@@ -1,0 +1,50 @@
+name: Laravel Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  APP_NAME: Laravel
+  APP_ENV: testing
+  APP_KEY: base64:Y2U2EnlvEHtW3XP27mt6u0+XNmOkIESELoC4ozzyz1s=
+  DB_CONNECTION: sqlite
+  DB_DATABASE: database/testing.sqlite
+  JWT_SECRET: ptwb34FHj8g0vBiHolCE2laq8nUtIAkqXxegC8hK2hnFxeGpVaZTgcn8xOcZ3Hxk
+
+jobs:
+  test:
+    name: Run PHP Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: mbstring, ctype, fileinfo, openssl, pdo_sqlite, gd, bcmath
+
+      - name: Prepare SQLite database
+        run: |
+          mkdir -p database
+          touch database/testing.sqlite
+          chmod 777 database/testing.sqlite
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Setup environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate:fresh --force
+
+      - name: Execute tests
+        run: php artisan test
