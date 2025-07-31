@@ -12,6 +12,7 @@ use App\Http\Requests\Service\UpdateServiceRequest;
 use App\Http\Resources\Service\ServicesOfCustomer;
 use App\Http\Resources\Service\AllServicesResource;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @OA\Tag(
@@ -105,7 +106,13 @@ class ServiceController extends Controller
      */
     public function getAll(): AnonymousResourceCollection
     {
-        $customers = Service::with('customer')->paginate(perPage: 10);
+        $page = request()->get('page', 1);
+        $cacheKey = "services.all.page_{$page}";
+        $cacheDuration = now()->addHours(1);
+
+        $customers = Cache::remember($cacheKey, $cacheDuration, function () {
+            return Service::with('customer')->paginate(perPage: 10);
+        });
 
         return AllServicesResource::collection($customers);
     }

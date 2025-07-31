@@ -4,6 +4,7 @@ use App\Models\Service;
 use App\Models\Customer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use function Pest\Laravel\actingAs;
+use Illuminate\Support\Facades\Cache;
 
 
 uses(RefreshDatabase::class);
@@ -50,20 +51,32 @@ it('retrieves services of a customer', function () {
 
 it('gets paginated list of all services', function () {
     $user = Customer::factory()->create();
-
-    Service::factory()->count(15)->create([
-        'customer_id' => $user->id,
-    ]);
+    Service::factory()->count(15)->create(['customer_id' => $user->id]);
 
     actingAs($user, 'customer-api')
         ->getJson('/api/service/all')
         ->assertOk()
         ->assertJsonStructure([
-            'data',
+            'data' => [
+                '*' => ['name', 'description']
+            ],
             'links',
             'meta',
         ])
         ->assertJsonCount(10, 'data');
+
+    $cacheKey = 'services.all.page_1';
+    expect(Cache::has($cacheKey))->toBeTrue();
+
+    actingAs($user, 'customer-api')
+        ->getJson('/api/service/all')
+        ->assertOk()
+        ->assertJsonCount(10, 'data');
+
+    actingAs($user, 'customer-api')
+        ->getJson('/api/service/all?page=2')
+        ->assertOk()
+        ->assertJsonCount(5, 'data');
 });
 
 it('updates an existing service', function () {
